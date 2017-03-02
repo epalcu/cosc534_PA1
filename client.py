@@ -9,13 +9,6 @@ socket1.connect(add)
 data = socket1.recv(32)
 print data
 
-#socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-#print "Connection established.."
-#socket.send("hey")
-#data = socket.recv(32)i
-
-
 def connect(socket):
   socket.listen(1)
   while True:
@@ -29,9 +22,9 @@ def connect(socket):
     finally:
       return d
 
-  ###############################################
-  # Setup mock server to send data to interface #
-  ###############################################
+###############################################
+# Setup mock server to send data to interface #
+###############################################
 socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = ("localhost", 10000)
 socket2.bind(server)
