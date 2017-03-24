@@ -22,9 +22,11 @@ def test_password(password):
     else:
         return False
 
-def create_password(words, dict):
+def create_password(words):
+    dictionary = []
+    dictionary = open_dictionary(dictionary)
     for word in words:
-        for item in dict:
+        for item in dictionary:
             password = word + item
             if (test_password(password)):
                 print "Password: {0}".format(password)
@@ -51,5 +53,4 @@ if __name__ == "__main__":
         slices = None
 
     words = comm.scatter(slices, root=0)
-    dictionary = comm.scatter(dictionary, root=0)
-    create_password(words, dictionary)
+    create_password(words)
