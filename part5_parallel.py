@@ -52,4 +52,4 @@ if __name__ == "__main__":
 
     words = comm.scatter(slices, root=0)
     dictionary = comm.scatter(dictionary, root=0)
-    return create_password(words, dictionary)
+    create_password(words, dictionary)
