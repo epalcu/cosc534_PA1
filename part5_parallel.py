@@ -14,7 +14,10 @@ def open_dictionary(d_list):
     return d_list
 
 def test_password(password):
-    string = "codingSeahorses:-1128626187:" + password
+    challengeString = "-1128626187"
+    userName = "codingSeahorses"
+    hashString = "1FnK0Fv7JOHZgh82rtmWZDW9Y9KQdgz9Gh6E6Cs35AY="
+    string = userName + ":" + challengeString + ":" + password
     h = hashlib.sha256(string).digest()
     newString = base64.b64encode(h)
     if (newString == hashString):
