@@ -31,16 +31,22 @@ def create_password(word):
     dictionary = open_dictionary(dictionary)
     for item in dictionary:
         password = word + item
-        print "1: " + word + " + " + item + " ---> {0}\n".format(password)
+        #print "1: " + word + " + " + item + " ---> {0}\n".format(password)
         if (test_password(password)):
             print "Password: {0}".format(password)
-            exit(0)
+            return password
         else:
             password = item + word
-            print "2: " + item + " + " + word + " ---> {0}\n".format(password)
+            #print "2: " + item + " + " + word + " ---> {0}\n".format(password)
             if (test_password(password)):
                 print "Password: {0}".format(password)
-                exit(0)
+                return password
+    return False
+
+def kill_process(r):
+    if r != 0:
+        print "Killing process {0}.".format(r)
+        sys.exit(0)
 
 if __name__ == "__main__":
     comm = MPI.COMM_WORLD
@@ -58,5 +64,11 @@ if __name__ == "__main__":
         slices = None
 
     words = comm.scatter(slices, root=0)
-    Pool().map(create_password, words)
-    print "Password not found.."
+    process_results = Pool(4).map(create_password, words)
+
+    results = comm.gather(list(process_results), root=0)
+    kill_process(rank)
+
+    for result in results:
+        print set(result)
+    #print "Password not found.."
