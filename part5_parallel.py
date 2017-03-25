@@ -51,10 +51,8 @@ if __name__ == "__main__":
         slices = [[] for i in range(size)]
         for i, slice in enumerate(dictionary):
             slices[i % size].append(slice)
-        with open("slices", "w") as fname:
-            for slice in slices:
-                fname.write(slice)
-        fname.close()
+        for slice in slices:
+            print slice
     else:
         dictionary = None
         slices = None
