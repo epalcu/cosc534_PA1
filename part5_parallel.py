@@ -45,7 +45,7 @@ def create_password(word):
 
 def kill_process(r):
     if r != 0:
-        print "Killing process {0}.".format(r)
+        #print "Killing process {0}.".format(r)
         sys.exit(0)
 
 if __name__ == "__main__":
