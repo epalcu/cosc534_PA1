@@ -57,3 +57,4 @@ if __name__ == "__main__":
 
     words = comm.scatter(slices, root=0)
     Pool().map(create_password, words)
+    print "Password not found.."
