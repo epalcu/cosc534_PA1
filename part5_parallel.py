@@ -6,13 +6,13 @@ from mpi4py import MPI
 from multiprocessing import Pool
 
 # Read in dictionary into a list
-def open_dictionary(d_set):
+def open_dictionary(d_list):
     with open("cracklib-small") as fname:
         lines = fname.readlines()
         for line in lines:
-            d_set.add(line[:-1])
+            d_list.append(line)
     fname.close()
-    return d_set
+    return d_list
 
 def test_password(password):
     challengeString = "202555186"
@@ -27,7 +27,7 @@ def test_password(password):
         return False
 
 def create_password(word):
-    dictionary = set()
+    dictionary = []
     dictionary = open_dictionary(dictionary)
     for item in dictionary:
         password = word + item
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     rank = comm.Get_rank()
 
     if (rank == 0):
-        dictionary = set()
+        dictionary = []
         dictionary = open_dictionary(dictionary)
         slices = [[] for i in range(size)]
         for i, slice in enumerate(dictionary):
@@ -71,4 +71,3 @@ if __name__ == "__main__":
 
     for result in results:
         print set(result)
-    #print "Password not found.."
