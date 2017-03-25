@@ -19,13 +19,14 @@ def test_password(passwords):
     userName = "codingSeahorses"
     hashString = "XfqX+EDWLYKgOmM67+G+lOGf/Dmb9WfchMrquw5xpE0="
     for password in passwords:
+        print password
         string = userName + ":" + challengeString + ":" + password
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
         if (newString == hashString):
             print "Password: {0}".format(password)
-            return True, password
-    return False, None
+            return True
+    return False
 
 def three_word_password(word):
     dictionary = []
@@ -39,40 +40,10 @@ def three_word_password(word):
             passwords.append(item1 + item2 + word)
             passwords.append(item2 + word + item1)
             passwords.append(item2 + item1 + word)
-            password = test_password(passwords)
-            if (password[0] == True):
-                return password[1]
+            password = Pool(4).map(test_password, passwords)
+            if True in password:
+                return True
     return False
-
-# def four_word_password(word):
-#     dictionary = []
-#     dictionary = open_dictionary(dictionary)
-#     for item in dictionary:
-#         password = word + item
-#         if (test_password(password)):
-#             print "Password: {0}".format(password)
-#             return password
-#         else:
-#             password = item + word
-#             if (test_password(password)):
-#                 print "Password: {0}".format(password)
-#                 return password
-#     return False
-#
-# def five_word_password(word):
-#     dictionary = []
-#     dictionary = open_dictionary(dictionary)
-#     for item in dictionary:
-#         password = word + item
-#         if (test_password(password)):
-#             print "Password: {0}".format(password)
-#             return password
-#         else:
-#             password = item + word
-#             if (test_password(password)):
-#                 print "Password: {0}".format(password)
-#                 return password
-#     return False
 
 def kill_process(r):
     if r != 0:
