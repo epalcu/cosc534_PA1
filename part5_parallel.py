@@ -14,34 +14,65 @@ def open_dictionary(d_list):
     fname.close()
     return d_list
 
-def test_password(password):
+def test_password(passwords):
     challengeString = "202555186"
     userName = "codingSeahorses"
     hashString = "XfqX+EDWLYKgOmM67+G+lOGf/Dmb9WfchMrquw5xpE0="
-    string = userName + ":" + challengeString + ":" + password
-    h = hashlib.sha256(string).digest()
-    newString = base64.b64encode(h)
-    if (newString == hashString):
-        return True
-    else:
-        return False
-
-def create_password(word):
-    dictionary = []
-    dictionary = open_dictionary(dictionary)
-    for item in dictionary:
-        password = word + " " + item + '\n'
-        #print "1: " + word + " + " + item + " ---> {0}\n".format(password)
-        if (test_password(password)):
-            print "Password: {0}".format(password)
-            return password
+    for password in passwords:
+        string = userName + ":" + challengeString + ":" + password
+        h = hashlib.sha256(string).digest()
+        newString = base64.b64encode(h)
+        if (newString == hashString):
+            return True
         else:
-            password = item + " " + word + '\n'
-            #print "2: " + item + " + " + word + " ---> {0}\n".format(password)
-            if (test_password(password)):
+            return False
+
+def three_word_password(word):
+    dictionary = []
+    passwords = []
+    dictionary = open_dictionary(dictionary)
+    for item1 in dictionary:
+        for item2 in dictionary:
+            passwords.append(word + item1 + item2)
+            passwords.append(word + item2 + item1)
+            passwords.append(item1 + word + item2)
+            passwords.append(item1 + item2 + word)
+            passwords.append(item2 + word + item1)
+            passwords.append(item2 + item1 + word)
+            if (test_password(passwords)):
                 print "Password: {0}".format(password)
                 return password
     return False
+
+# def four_word_password(word):
+#     dictionary = []
+#     dictionary = open_dictionary(dictionary)
+#     for item in dictionary:
+#         password = word + item
+#         if (test_password(password)):
+#             print "Password: {0}".format(password)
+#             return password
+#         else:
+#             password = item + word
+#             if (test_password(password)):
+#                 print "Password: {0}".format(password)
+#                 return password
+#     return False
+#
+# def five_word_password(word):
+#     dictionary = []
+#     dictionary = open_dictionary(dictionary)
+#     for item in dictionary:
+#         password = word + item
+#         if (test_password(password)):
+#             print "Password: {0}".format(password)
+#             return password
+#         else:
+#             password = item + word
+#             if (test_password(password)):
+#                 print "Password: {0}".format(password)
+#                 return password
+#     return False
 
 def kill_process(r):
     if r != 0:
@@ -64,7 +95,7 @@ if __name__ == "__main__":
         slices = None
 
     words = comm.scatter(slices, root=0)
-    process_results = Pool(4).map(create_password, words)
+    process_results = Pool(4).map(three_word_password, words)
 
     results = comm.gather(list(process_results), root=0)
     kill_process(rank)
