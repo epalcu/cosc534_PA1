@@ -30,13 +30,13 @@ def create_password(word):
     dictionary = []
     dictionary = open_dictionary(dictionary)
     for item in dictionary:
-        password = word + " " + item
+        password = word + " " + item + '\n'
         #print "1: " + word + " + " + item + " ---> {0}\n".format(password)
         if (test_password(password)):
             print "Password: {0}".format(password)
             return password
         else:
-            password = item + " " + word
+            password = item + " " + word + '\n'
             #print "2: " + item + " + " + word + " ---> {0}\n".format(password)
             if (test_password(password)):
                 print "Password: {0}".format(password)
