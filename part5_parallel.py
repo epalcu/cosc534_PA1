@@ -31,11 +31,13 @@ def create_password(word):
     dictionary = open_dictionary(dictionary)
     for item in dictionary:
         password = word + item
+        print "1: {0}".format(password)
         if (test_password(password)):
             print "Password: {0}".format(password)
             exit(0)
         else:
             password = item + word
+            print "2: {0}".format(password)
             if (test_password(password)):
                 print "Password: {0}".format(password)
                 exit(0)
