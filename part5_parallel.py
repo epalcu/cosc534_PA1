@@ -15,9 +15,9 @@ def open_dictionary(d_list):
     return d_list
 
 def test_password(password):
-    challengeString = "1333439738"
+    challengeString = "202555186"
     userName = "codingSeahorses"
-    hashString = "Ksiohcxb+kg28WCWY0n6yZqxSt08B1p631UBvcf/WcM="
+    hashString = "XfqX+EDWLYKgOmM67+G+lOGf/Dmb9WfchMrquw5xpE0="
     string = userName + ":" + challengeString + ":" + password
     h = hashlib.sha256(string).digest()
     newString = base64.b64encode(h)
@@ -51,8 +51,6 @@ if __name__ == "__main__":
         slices = [[] for i in range(size)]
         for i, slice in enumerate(dictionary):
             slices[i % size].append(slice)
-        for slice in slices:
-            print slice
     else:
         dictionary = None
         slices = None
