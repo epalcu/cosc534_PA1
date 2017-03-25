@@ -23,9 +23,9 @@ def test_password(passwords):
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
         if (newString == hashString):
-            return True
-        else:
-            return False
+            print "Password: {0}".format(password)
+            return True, password
+    return False, None
 
 def three_word_password(word):
     dictionary = []
@@ -39,9 +39,9 @@ def three_word_password(word):
             passwords.append(item1 + item2 + word)
             passwords.append(item2 + word + item1)
             passwords.append(item2 + item1 + word)
-            if (test_password(passwords)):
-                print "Password: {0}".format(password)
-                return password
+            password = test_password(passwords)
+            if (password[0] == True):
+                return password[1]
     return False
 
 # def four_word_password(word):
