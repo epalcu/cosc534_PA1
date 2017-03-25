@@ -3,6 +3,7 @@ import sys
 import hashlib
 import base64
 from mpi4py import MPI
+from multiprocessing import Pool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
@@ -25,20 +26,19 @@ def test_password(password):
     else:
         return False
 
-def create_password(words):
+def create_password(word):
     dictionary = []
     dictionary = open_dictionary(dictionary)
-    for word in words:
-        for item in dictionary:
-            password = word + item
+    for item in dictionary:
+        password = word + item
+        if (test_password(password)):
+            print "Password: {0}".format(password)
+            exit(0)
+        else:
+            password = item + word
             if (test_password(password)):
                 print "Password: {0}".format(password)
                 exit(0)
-            else:
-                password = item + word
-                if (test_password(password)):
-                    print "Password: {0}".format(password)
-                    exit(0)
 
 if __name__ == "__main__":
     comm = MPI.COMM_WORLD
@@ -56,4 +56,4 @@ if __name__ == "__main__":
         slices = None
 
     words = comm.scatter(slices, root=0)
-    create_password(words)
+    Pool().map(create_password, words)
