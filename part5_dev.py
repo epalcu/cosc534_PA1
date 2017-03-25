@@ -40,7 +40,7 @@ def three_word_password(word):
             passwords.append(item1 + item2 + word)
             passwords.append(item2 + word + item1)
             passwords.append(item2 + item1 + word)
-            password = Pool(4).map(test_password, passwords)
+            password = test_password, passwords
             if True in password:
                 return True
     return False
