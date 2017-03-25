@@ -24,7 +24,7 @@ def test_password(passwords):
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
         if (newString == hashString):
-            print "Password: {0}".format(password)
+            sys.stderr.write(password)
             return True
     return False
 
