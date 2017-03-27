@@ -15,9 +15,9 @@ def open_dictionary(d_list):
     return d_list
 
 def test_password(passwords):
-    challengeString = "202555186"
+    challengeString = "1362111551"
     userName = "codingSeahorses"
-    hashString = "XfqX+EDWLYKgOmM67+G+lOGf/Dmb9WfchMrquw5xpE0="
+    hashString = "ppzJy3VakbXRWLzj7udaNny5iZ4wSMsoiuegQLoWyrI="
     for password in passwords:
         string = userName + ":" + challengeString + ":" + password
         h = hashlib.sha256(string).digest()
@@ -26,22 +26,6 @@ def test_password(passwords):
             sys.stderr.write(password)
             return True, password
     return False, None
-
-def two_word_password(word):
-    dictionary = []
-    passwords = []
-    dictionary = open_dictionary(dictionary)
-    for item1 in dictionary:
-            passwords.append(word + item1 + item2)
-            passwords.append(word + item2 + item1)
-            passwords.append(item1 + word + item2)
-            passwords.append(item1 + item2 + word)
-            passwords.append(item2 + word + item1)
-            passwords.append(item2 + item1 + word)
-            password = test_password(passwords)
-            if (password[0] == True):
-                return password[1]
-    return False
 
 def three_word_password(word):
     dictionary = []
@@ -59,36 +43,6 @@ def three_word_password(word):
             if (password[0] == True):
                 return password[1]
     return False
-
-# def four_word_password(word):
-#     dictionary = []
-#     dictionary = open_dictionary(dictionary)
-#     for item in dictionary:
-#         password = word + item
-#         if (test_password(password)):
-#             print "Password: {0}".format(password)
-#             return password
-#         else:
-#             password = item + word
-#             if (test_password(password)):
-#                 print "Password: {0}".format(password)
-#                 return password
-#     return False
-#
-# def five_word_password(word):
-#     dictionary = []
-#     dictionary = open_dictionary(dictionary)
-#     for item in dictionary:
-#         password = word + item
-#         if (test_password(password)):
-#             print "Password: {0}".format(password)
-#             return password
-#         else:
-#             password = item + word
-#             if (test_password(password)):
-#                 print "Password: {0}".format(password)
-#                 return password
-#     return False
 
 def kill_process(r):
     if r != 0:
