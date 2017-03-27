@@ -27,6 +27,22 @@ def test_password(passwords):
             return True, password
     return False, None
 
+def two_word_password(word):
+    dictionary = []
+    passwords = []
+    dictionary = open_dictionary(dictionary)
+    for item1 in dictionary:
+            passwords.append(word + item1 + item2)
+            passwords.append(word + item2 + item1)
+            passwords.append(item1 + word + item2)
+            passwords.append(item1 + item2 + word)
+            passwords.append(item2 + word + item1)
+            passwords.append(item2 + item1 + word)
+            password = test_password(passwords)
+            if (password[0] == True):
+                return password[1]
+    return False
+
 def three_word_password(word):
     dictionary = []
     passwords = []
