@@ -19,6 +19,7 @@ def test_password(passwords):
     userName = "codingSeahorses"
     hashString = "ppzJy3VakbXRWLzj7udaNny5iZ4wSMsoiuegQLoWyrI="
     for password in passwords:
+        print password
         string = userName + ":" + challengeString + ":" + password
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
