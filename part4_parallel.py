@@ -29,15 +29,18 @@ def three_word_password(word):
     dictionary = []
     dict = open_dictionary(dictionary)
     two_combos = [[''.join(word + item), ''.join(item + word), ''.join(word + ':' + item), ''.join(item + ':' + word)] for item in dictionary]
-    combos = [[''.join(two_combos[i][0] + dict[i]), ''.join(dict[i] + two_combos[i][0]),
-               ''.join(two_combos[i][1] + dict[i]), ''.join(dict[i] + two_combos[i][1]),
-               ''.join(two_combos[i][2].replace(':',  dict[i])),
-               ''.join(two_combos[i][3].replace(':',  dict[i]))] for i in range(0, len(two_combos))]
+    combos = [[[''.join(two_combos[i][0] + dict[j]), ''.join(dict[i] + two_combos[i][0]),
+               ''.join(two_combos[i][1] + dict[j]), ''.join(dict[i] + two_combos[i][1]),
+               ''.join(two_combos[i][2].replace(':',  dict[j])),
+               ''.join(two_combos[i][3].replace(':',  dict[j]))]
+               for i in range(0, len(two_combos))] for j in range(0, len(dict))]
     password = map(test_password, combos)
     if (password[0] == True):
         return password[1]
     else:
+        print "Password not found.\n"
         return False
+
 def kill_process(r):
     if r != 0:
         #print "Killing process {0}.".format(r)
