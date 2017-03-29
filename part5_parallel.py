@@ -7,7 +7,7 @@ from multiprocessing import Pool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
-    with open("cracklib-smaller.txt") as fname:
+    with open("cracklib-smallest.txt") as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
