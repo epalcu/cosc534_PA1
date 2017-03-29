@@ -25,7 +25,6 @@ def test_password(passwords):
         if (newString == hashString):
             sys.stderr.write(password)
             return True, password
-    print "Password not found..\n"
     return False, None
 
 def three_word_password(word):
