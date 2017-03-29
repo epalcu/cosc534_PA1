@@ -27,15 +27,17 @@ def test_password(passwords):
 
 def three_word_password(word):
     dictionary = []
-    dictionary = open_dictionary(dictionary)
-    first_combo = [''.join(map(str, word) + map(str, ":" + item)) for item in dictionary]
-    second_combo = [''.join(map(str, item) + map(str, ":" + word)) for item in dictionary]
-    password = test_password([first_combo, second_combo])
+    dict = open_dictionary(dictionary)
+    two_combos = [[''.join(word + item), ''.join(item + word), ''.join(word + ':' + item), ''.join(item + ':' + word)] for item in dictionary]
+    combos = [[''.join(two_combos[i][0] + dict[i]), ''.join(dict[i] + two_combos[i][0]),
+               ''.join(two_combos[i][1] + dict[i]), ''.join(dict[i] + two_combos[i][1]),
+               ''.join(two_combos[i][2].replace(':',  dict[i])),
+               ''.join(two_combos[i][3].replace(':',  dict[i]))] for i in range(0, len(two_combos))]
+    password = map(test_password, combos)
     if (password[0] == True):
         return password[1]
     else:
         return False
-
 def kill_process(r):
     if r != 0:
         #print "Killing process {0}.".format(r)
