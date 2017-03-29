@@ -25,6 +25,7 @@ def test_password(passwords):
         if (newString == hashString):
             sys.stderr.write(password)
             return True, password
+    print "Password not found..\n"
     return False, None
 
 def three_word_password(word):
@@ -42,7 +43,7 @@ def three_word_password(word):
             value, password = test_password(passwords)
             if (value == True):
                 return password
-    print False
+    print "Moving on to next word in processes test set..\n"
     return False
 
 def kill_process(r):
