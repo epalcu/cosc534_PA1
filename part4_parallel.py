@@ -7,7 +7,7 @@ from multiprocessing import Pool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
-    with open("cracklib-smallest.txt") as fname:
+    with open("cracklib-small") as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
@@ -27,21 +27,14 @@ def test_password(passwords):
 
 def three_word_password(word):
     dictionary = []
-    passwords = []
     dictionary = open_dictionary(dictionary)
-    for item1 in dictionary:
-        for item2 in dictionary:
-            passwords.append(word + item1 + item2)
-            passwords.append(word + item2 + item1)
-            passwords.append(item1 + word + item2)
-            passwords.append(item1 + item2 + word)
-            passwords.append(item2 + word + item1)
-            passwords.append(item2 + item1 + word)
-            value, password = test_password(passwords)
-            if (value == True):
-                return password
-    print "Moving on to next word in processes test set..\n"
-    return False
+    first_combo = [''.join(map(str, word) + map(str, ":" + item)) for item in dictionary]
+    second_combo = [''.join(map(str, item) + map(str, ":" + word)) for item in dictionary]
+    password = test_password([first_combo, second_combo])
+    if (password[0] == True):
+        return password[1]
+    else:
+        return False
 
 def kill_process(r):
     if r != 0:
