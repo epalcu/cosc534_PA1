@@ -42,6 +42,7 @@ def three_word_password(word):
             password = test_password(passwords)
             if (password[0] == True):
                 return password[1]
+    print False
     return False
 
 def kill_process(r):
