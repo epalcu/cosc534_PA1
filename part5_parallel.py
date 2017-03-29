@@ -39,9 +39,9 @@ def three_word_password(word):
             passwords.append(item1 + item2 + word)
             passwords.append(item2 + word + item1)
             passwords.append(item2 + item1 + word)
-            password = test_password(passwords)
-            if (password[0] == True):
-                return password[1]
+            value, password = test_password(passwords)
+            if (value == True):
+                return password
     print False
     return False
 
