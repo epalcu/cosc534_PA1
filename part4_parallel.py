@@ -2,11 +2,12 @@ import os
 import sys
 import hashlib
 import base64
+from mpi4py import MPI
 from multiprocessing import Pool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
-    with open("cracklib-small") as fname:
+    with open("cracklib-smallest.txt") as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
@@ -14,9 +15,9 @@ def open_dictionary(d_list):
     return d_list
 
 def test_password(passwords):
-    hashString = "ppzJy3VakbXRWLzj7udaNny5iZ4wSMsoiuegQLoWyrI="
+    hashString = "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="
     for password in passwords:
-        string = "codingSeahorses:1362111551:" + password
+        string = "codingSeahorses:-1006154492:" + password
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
         if (newString == hashString):
@@ -36,15 +37,37 @@ def three_word_password(word):
             passwords.append(item1 + item2 + word)
             passwords.append(item2 + word + item1)
             passwords.append(item2 + item1 + word)
-            password = test_password(passwords)
-            if (password[0] == True):
-                return password[1]
+            value, password = test_password(passwords)
+            if (value == True):
+                return password
+    print "Moving on to next word in processes test set..\n"
     return False
 
-if __name__ == "__main__":
-    dictionary = []
-    dictionary = open_dictionary(dictionary)
-    process_results = Pool(32).map(three_word_password, dictionary)
+def kill_process(r):
+    if r != 0:
+        #print "Killing process {0}.".format(r)
+        sys.exit(0)
 
-    for result in process_results:
+if __name__ == "__main__":
+    comm = MPI.COMM_WORLD
+    size = comm.Get_size()
+    rank = comm.Get_rank()
+
+    if (rank == 0):
+        dictionary = []
+        dictionary = open_dictionary(dictionary)
+        slices = [[] for i in range(size)]
+        for i, slice in enumerate(dictionary):
+            slices[i % size].append(slice)
+    else:
+        dictionary = None
+        slices = None
+
+    words = comm.scatter(slices, root=0)
+    process_results = Pool(4).map(three_word_password, words)
+
+    results = comm.gather(list(process_results), root=0)
+    kill_process(rank)
+
+    for result in results:
         print set(result)

@@ -15,9 +15,9 @@ def open_dictionary(d_list):
     return d_list
 
 def test_password(passwords):
-    hashString = "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="
+    hashString = "ppzJy3VakbXRWLzj7udaNny5iZ4wSMsoiuegQLoWyrI="
     for password in passwords:
-        string = "codingSeahorses:-1006154492:" + password
+        string = "codingSeahorses:1362111551:" + password
         h = hashlib.sha256(string).digest()
         newString = base64.b64encode(h)
         if (newString == hashString):
