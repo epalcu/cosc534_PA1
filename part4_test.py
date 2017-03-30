@@ -4,6 +4,7 @@ import hashlib
 import base64
 import time
 from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
@@ -40,7 +41,7 @@ def three_word_password(word):
                ''.join(two_combos[i][2].replace(':',  dict[j])),
                ''.join(two_combos[i][3].replace(':',  dict[j]))]
                for i in range(0, len(two_combos))] for j in range(0, len(dict))]
-    passwords = map(traverse_combos, combos)
+    passwords = ThreadPool(8).map(traverse_combos, combos)
     if True in passwords:
         return True
     else:
@@ -52,6 +53,6 @@ if __name__ == "__main__":
     dictionary = []
     dictionary = open_dictionary(dictionary)
     start = time.time()
-    process_results = Pool(64).map(three_word_password, dictionary)
+    process_results = Pool(16).map(three_word_password, dictionary)
     end = time.time() - start
     print "Total elapsed computation time: {0} secs.".format(round(end, 2))

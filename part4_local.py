@@ -4,10 +4,11 @@ import hashlib
 import base64
 import time
 from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
-    with open("cracklib-smallest.txt") as fname:
+    with open("cracklib-small") as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
@@ -39,7 +40,7 @@ def three_word_password(word):
     if True in passwords:
         return True
     else:
-        sys.stderr.write("Password not found.\n")
+        #sys.stderr.write("Password not found.\n")
         return False
 
 
@@ -47,6 +48,6 @@ if __name__ == "__main__":
     dictionary = []
     dictionary = open_dictionary(dictionary)
     start = time.time()
-    process_results = Pool(64).map(three_word_password, dictionary)
+    process_results = Pool(128).map(three_word_password, dictionary)
     end = time.time() - start
     print "Total elapsed computation time: {0} secs.".format(round(end, 2))
