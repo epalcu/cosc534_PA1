@@ -14,40 +14,44 @@ def open_dictionary(d_list):
     fname.close()
     return d_list
 
-def test_password(password_list):
+def test_password(password):
     hashString = "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="
-    for password in password_list:
-        string = "codingSeahorses:-1006154492:" + password
-        h = hashlib.sha256(string).digest()
-        newString = base64.b64encode(h)
-        if (newString == hashString):
-            sys.stderr.write(password)
-            return True
-    return False
+    string = "codingSeahorses:-1006154492:" + password
+    h = hashlib.sha256(string).digest()
+    newString = base64.b64encode(h)
+    if (newString == hashString):
+        sys.stderr.write(password)
+        return True
+    else:
+        return False
+
+def traverse_passwords(passwords):
+    return map(test_password, passwords)
+
+def traverse_combos(combos):
+    return map(traverse_passwords, combos)
 
 def three_word_password(word):
     dictionary = []
-    passwords = []
-    dictionary = open_dictionary(dictionary)
-    for item1 in dictionary:
-        for item2 in dictionary:
-            passwords.append(word + item1 + item2)
-            passwords.append(word + item2 + item1)
-            passwords.append(item1 + word + item2)
-            passwords.append(item1 + item2 + word)
-            passwords.append(item2 + word + item1)
-            passwords.append(item2 + item1 + word)
-            password = map(test_password, passwords)
-            if True in password:
-                return True
-    sys.stderr.write("Password not found.\n")
-    return False
+    dict = open_dictionary(dictionary)
+    two_combos = [[''.join(word + item), ''.join(item + word), ''.join(word + ':' + item), ''.join(item + ':' + word)] for item in dictionary]
+    combos = [[[''.join(two_combos[i][0] + dict[j]), ''.join(dict[i] + two_combos[i][0]),
+               ''.join(two_combos[i][1] + dict[j]), ''.join(dict[i] + two_combos[i][1]),
+               ''.join(two_combos[i][2].replace(':',  dict[j])),
+               ''.join(two_combos[i][3].replace(':',  dict[j]))]
+               for i in range(0, len(two_combos))] for j in range(0, len(dict))]
+    passwords = map(traverse_combos, combos)
+    if True in passwords:
+        return True
+    else:
+        sys.stderr.write("Password not found.\n")
+        return False
 
 
 if __name__ == "__main__":
     dictionary = []
     dictionary = open_dictionary(dictionary)
     start = time.time()
-    process_results = Pool(32).map(three_word_password, dictionary)
+    process_results = Pool(64).map(three_word_password, dictionary)
     end = time.time() - start
     print "Total elapsed computation time: {0} secs.".format(round(end, 2))
