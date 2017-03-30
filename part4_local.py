@@ -2,6 +2,7 @@ import os
 import sys
 import hashlib
 import base64
+import time
 from multiprocessing import Pool
 
 # Read in dictionary into a list
@@ -22,8 +23,8 @@ def test_password(password_list):
             newString = base64.b64encode(h)
             if (newString == hashString):
                 sys.stderr.write(password)
-                return True, password
-    return False, None
+                return True
+    return False
 
 def three_word_password(word):
     dictionary = []
@@ -34,18 +35,19 @@ def three_word_password(word):
                ''.join(two_combos[i][2].replace(':',  dict[j])),
                ''.join(two_combos[i][3].replace(':',  dict[j]))]
                for i in range(0, len(two_combos))] for j in range(0, len(dict))]
-    password = map(test_password, combos)
-    if (password[0] == True):
-        return password[1]
+    passwords = map(test_password, combos)
+    if True in passwords:
+        return True
     else:
-        print "Password not found.\n"
+        sys.stderr.write("Password not found.\n")
         return False
 
 
 if __name__ == "__main__":
     dictionary = []
     dictionary = open_dictionary(dictionary)
+    start = time.time()
     process_results = Pool(32).map(three_word_password, dictionary)
-
-    for result in process_results:
-        print result
+    print process_results
+    end = time.time() - start
+    print "Total elapsed computation time: {0} secs.".format(round(end, 2))
