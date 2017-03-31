@@ -1,4 +1,3 @@
-assertive
 anyone
 anyplace
 anything
