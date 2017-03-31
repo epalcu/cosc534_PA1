@@ -8,7 +8,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 # Read in dictionary into a list
 def open_dictionary(d_list):
-    with open("cracklib-small") as fname:
+    with open(sys.argv[1]) as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
