@@ -48,6 +48,6 @@ if __name__ == "__main__":
     dictionary = []
     dictionary = open_dictionary(dictionary)
     start = time.time()
-    process_results = Pool(128).map(three_word_password, dictionary)
+    process_results = Pool(8).map(three_word_password, dictionary)
     end = time.time() - start
     print "Total elapsed computation time: {0} secs.".format(round(end, 2))
