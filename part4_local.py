@@ -7,9 +7,9 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
 
 # Read in dictionary into a list
-def open_dictionary():
+def open_dictionary(dict):
     d_list = []
-    with open(sys.argv[1]) as fname:
+    with open(dict) as fname:
         lines = fname.readlines()
         for line in lines:
             d_list.append(line[:-1])
@@ -43,12 +43,12 @@ def three_word_password(word):
     if word in completed_words:
         return False
     else:
-        dict = open_dictionary()
-        two_combos = [[''.join(word + item), ''.join(item + word), ''.join(word + ':' + item), ''.join(item + ':' + word)] for item in dictionary]
-        combos = [[[''.join(two_combos[i][0] + dict[j]), ''.join(dict[i] + two_combos[i][0]),
-                   ''.join(two_combos[i][1] + dict[j]), ''.join(dict[i] + two_combos[i][1]),
-                   ''.join(two_combos[i][2].replace(':',  dict[j])),
-                   ''.join(two_combos[i][3].replace(':',  dict[j]))]
+        dict = open_dictionary(sys.argv[2])
+        two_combos = [[''.join(word + item), ''.join(item + word), ''.join(word + ":" + item), ''.join(item + ":" + word)] for item in dict]
+        combos = [[[''.join(two_combos[i][0] + dict[j]), ''.join(dict[j] + two_combos[i][0]),
+                   ''.join(two_combos[i][1] + dict[j]), ''.join(dict[j] + two_combos[i][1]),
+                   ''.join(two_combos[i][2].replace(":",  dict[j])),
+                   ''.join(two_combos[i][3].replace(":",  dict[j]))]
                    for i in range(0, len(two_combos))] for j in range(0, len(dict))]
         passwords = map(test_password, combos)
         open("completed_words.txt", "a").write(word + '\n')
@@ -59,8 +59,8 @@ def three_word_password(word):
 
 
 if __name__ == "__main__":
-    dictionary = open_dictionary()
+    dictionary = open_dictionary(sys.argv[1])
     start = time.time()
-    process_results = Pool().map(three_word_password, dictionary)
+    process_results = Pool(4).map(three_word_password, dictionary)
     end = time.time() - start
     print "Total elapsed computation time: {0} secs.".format(round(end, 2))
