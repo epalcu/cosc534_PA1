@@ -24,43 +24,69 @@ def open_completed():
     fname.close()
     return c_list
 
-def test_password(password):
-    #print "Testing password: {0}".format(password)
-    string = "codingSeahorses:-1006154492:" + str(password)
-    h = hashlib.sha256(string).digest()
-    newString = base64.b64encode(h)
-    if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
-        sys.stderr.write(password)
-        open("password.txt", "w").write("Password: " + password)
-        return True
-    else:
-        return False
-
 def three_word_password(word):
     completed_words = open_completed()
     if word in completed_words:
         return False
     else:
-        passwords = []
         dict = open_dictionary(sys.argv[2])
         for item1 in range(0, len(dict)):
-            print item1
             for item2 in range(0, len(dict)):
-                passwords.append(word + dict[item1] + dict[item2])
-                passwords.append(word + dict[item2] + dict[item1])
-                passwords.append(dict[item1] + word + dict[item2])
-                passwords.append(dict[item1] + dict[item2] + word)
-                passwords.append(dict[item2] + word + dict[item1])
-                passwords.append(dict[item2] + dict[item1] + word)
-                passwords = map(test_password, passwords)
-                passwords[:] = []
-        print "Completed word: {0}".format(word)
+                # Test combination one
+                string = "codingSeahorses:-1006154492:" + word + dict[item1] + dict[item2]
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(word + dict[item1] + dict[item2])
+                    open("password.txt", "w").write("Password: " + word + dict[item1] + dict[item2])
+                    return word + dict[item1] + dict[item2]
+                # Test combination two
+                string = "codingSeahorses:-1006154492:" + word + dict[item2] + dict[item1]
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(word + dict[item2] + dict[item1])
+                    open("password.txt", "w").write("Password: " + word + dict[item2] + dict[item1])
+                    return word + dict[item2] + dict[item1]
+                # Test combination three
+                string = "codingSeahorses:-1006154492:" + dict[item1] + word + dict[item2]
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(dict[item1] + word + dict[item2])
+                    open("password.txt", "w").write("Password: " + dict[item1] + word + dict[item2])
+                    return dict[item1] + word + dict[item2]
+                # Test combination four
+                string = "codingSeahorses:-1006154492:" + dict[item1] + dict[item2] + word
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(dict[item1] + dict[item2] + word)
+                    open("password.txt", "w").write("Password: " + dict[item1] + dict[item2] + word)
+                    return dict[item1] + dict[item2] + word
+                # Test combination five
+                string = "codingSeahorses:-1006154492:" + dict[item2] + word + dict[item1]
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(dict[item2] + word + dict[item1])
+                    open("password.txt", "w").write("Password: " + dict[item2] + word + dict[item1])
+                    return dict[item2] + word + dict[item1]
+                # Test combination six
+                string = "codingSeahorses:-1006154492:" + dict[item2] + dict[item1] + word
+                h = hashlib.sha256(string).digest()
+                newString = base64.b64encode(h)
+                if (newString == "DwYJS3xITeUb/TlJ/9vjdJSYRxdGuaR9BzqMadaivlI="):
+                    sys.stderr.write(dict[item2] + dict[item1] + word)
+                    open("password.txt", "w").write("Password: " + dict[item2] + dict[item1] + word)
+                    return dict[item2] + dict[item1] + word
+        #print "Completed word: {0}".format(word)
         open("completed_words.txt", "a").write(word + '\n')
 
 
 if __name__ == "__main__":
     dictionary = open_dictionary(sys.argv[1])
-    start = time.time()
+    #start = time.time()
     Pool(4).map(three_word_password, dictionary)
-    end = time.time() - start
-    print "Total elapsed computation time: {0} secs.".format(round(end, 2))
+    #end = time.time() - start
+    #print "Total elapsed computation time: {0} secs.".format(round(end, 2))
