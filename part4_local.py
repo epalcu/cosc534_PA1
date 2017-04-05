@@ -86,6 +86,7 @@ def three_word_password(word):
 
 if __name__ == "__main__":
     dictionary = open_dictionary(sys.argv[1])
+    open("completed_words.txt", "w").write('\n')
     #start = time.time()
     Pool(4).map(three_word_password, dictionary)
     #end = time.time() - start
